@@ -1,0 +1,22 @@
+@{
+    ViewData["Title"] = "Tüm Aktivitelerimize Göz Atın";
+    @model List<tasktracker.Models.Event>
+}
+
+<h1> Events Page</h1>
+<p>
+    Mevcut tüm aktiviteler listelenecek.
+</p>
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No events found</p>
+}
+else
+{
+    foreach (var e in Model)
+    {
+        <p>@e.event_name</p>
+        <p>@e.event_description</p>
+    }
+}
