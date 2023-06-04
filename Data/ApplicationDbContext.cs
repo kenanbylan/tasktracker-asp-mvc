@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using tasktracker.Models;
 
 namespace tasktracker.Data;
 
@@ -9,4 +10,7 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
+    
+    
+    public DbSet<Event>? Events { get; set; }
 }

@@ -13,6 +13,9 @@
                 <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
             </form>
         </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </li>
     }
     else
     {
@@ -22,5 +25,12 @@
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
         </li>
+    }
+    
+    @if (SignInManager.IsSignedIn(User))
+    {
+        Console.WriteLine("User is signed in");
+        var user = await UserManager.GetUserAsync(User);
+        Console.WriteLine(user.Id);
     }
 </ul>
