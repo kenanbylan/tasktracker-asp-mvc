@@ -20,4 +20,14 @@ public class EventController : Controller
         var events = _context.Events.ToList();
         return View(events);
     }
+
+    public IActionResult EventsUser()
+    {
+        return View();
+    }
+
+    public IActionResult EventsJoinUser()
+    {
+        return View();
+    }
 }
