@@ -4,15 +4,53 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - tasktracker</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/> *@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/tasktracker.styles.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 <body>
+@*header-start*@
+<div class="px-3 py-2 text-bg-dark">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a asp-controller="Home" asp-action="Index" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                <i class="bi bi-bootstrap m-2" style="font-size: 2rem;"></i>
+                <span class="fs-4">Tasktracker</span>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                <li>
+                    <a asp-controller="Home" asp-action="Index" class="nav-link text-white">
+                        <i class="bi bi-house m-1"></i>
+                        Ana Sayfa
+                    </a>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Event" asp-action="Events" class="nav-link text-white">
+                        <i class="bi bi-speedometer2 m-1"></i>
+                        Etkinliklerimize Gözat
+                    </a>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Profile" asp-action="Members" class="nav-link text-white">
+                        <i class="bi bi-person-circle m-1"></i>
+                        Üyelerimiz
+                    </a>
+                </li>
+            <partial name="_LoginPartial"/>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+@*
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">tasktracker</a>
+            <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">tasktracker</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -20,10 +58,13 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link text-white" asp-area="" asp-controller="Event" asp-action="Events">Etkinliklerimiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="" asp-controller="Profile" asp-action="Members">Üyelerimiz</a>
                     </li>
                 </ul>
                 <partial name="_LoginPartial"/>
@@ -31,20 +72,68 @@
         </div>
     </nav>
 </header>
+*@
+
+
 <div class="container">
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2023 - tasktracker - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+@*footer start*@
+<div class="row">
+    <div class="bg-dark-subtle border-top-2 border-bottom-2 shadow p-2 bg-body-tertiary rounded">
+        <div class="container">
+            <footer class="d-flex flex-wrap justify-content-between align-items-center px-2 py-3 my-4 border-top">
+                <p class="col-md-4 mb-0 text-body-secondary">© 2023 Tasktrackr, Inc</p>
+
+                <ul class="nav col-md-4 justify-content-center list-unstyled d-flex">
+                    <li class="ms-3">
+                        <a class="text-body-secondary" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-facebook" style="font-size: 1.5rem;"></i>
+                        </a>
+                    </li>
+                    <li class="ms-3">
+                        <a class="text-body-secondary" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-github" style="font-size: 1.5rem;"></i>
+                        </a>
+                    </li>
+                    <li class="ms-3">
+                        <a class="text-body-secondary" href="#">
+                            <i class="bi bi-instagram" style="font-size: 1.5rem;"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="nav col-md-4 justify-content-end">
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link px-2 text-body-secondary">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link px-2 text-body-secondary">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link px-2 text-body-secondary">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link px-2 text-body-secondary">FAQs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link px-2 text-body-secondary">About</a>
+                    </li>
+                </ul>
+            </footer>
+        </div>
     </div>
-</footer>
+</div>
+@*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+@* <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script> *@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -2,25 +2,58 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-            </form>
-        </li>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        </li>
-    }
-</ul>
+@if (SignInManager.IsSignedIn(User))
+{
+    <li>
+        <a asp-area="" asp-controller="Event" asp-action="EventsJoinUser" class="nav-link text-white">
+            <i class="bi bi-table m-1"></i>
+            Katılacaklarım
+        </a>
+    </li>
+    <li>
+        <a asp-controller="Event" asp-action="EventsUser" class="nav-link text-white">
+            <i class="bi bi-grid m-1"></i>
+            Oluşturduklarım
+        </a>
+    </li>
+    <div class="flex-shrink-0 dropdown">
+        <a asp-controller="Home" asp-action="" class="d-block link-light text-decoration-none dropdown-toggle show" data-bs-toggle="dropdown" aria-expanded="true">
+            <img src="https://avatars.githubusercontent.com/u/77414773?v=4" alt="Melih Afsar" width="32" height="32" class="rounded-circle">
+        </a>
+        <ul class="dropdown-menu text-small shadow show" data-popper-placement="bottom-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0.5px, 34px, 0px);">
+            <li>
+                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Merhaba @User.Identity?.Name!</a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-controller="Home" asp-action="Index">Yeni Etkinlik Düzenle</a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-area="" asp-controller="Profile" asp-action="Profile">Profil Ayarları</a>
+            </li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li>
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link btn btn-link text-dark">Çıkış Yap</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Kayıt Olun</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Giriş Yapın</a>
+    </li>
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    Console.WriteLine("User is signed in");
+    var user = await UserManager.GetUserAsync(User);
+    Console.WriteLine(user.Id);
+}

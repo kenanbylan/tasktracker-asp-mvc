@@ -1,0 +1,28 @@
+@{
+    ViewData["Title"] = "Tüm Üyelerimiz";
+    @model List<tasktracker.Models.Profile>
+
+    }
+
+<h1> Üyelerimiz </h1>
+<p>
+    Mevcut tüm üyeler listelenecek.
+</p>
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>Üye bulunamadı</p>
+}
+else
+{
+    foreach (var index in Model)
+    {
+        <div>
+            <h1> Üye </h1>
+            <p>@index.UserName</p>
+            <p>@index.UserSurname</p>
+            <p>@index.UserEmail</p>
+            <p>@index.UserPhone</p>
+        </div>
+    }
+}
