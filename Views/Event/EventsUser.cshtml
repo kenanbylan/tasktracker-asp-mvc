@@ -1,7 +1,137 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @{
     ViewData["Title"] = "Yönetici Olduğunuz Aktiviteler";
 }
 
-    <h1> Oluşturduğunuz Tüm aktiviteler </h1>
-<p> Kullanıcının yönetici olduğu kendisinin oluşturduğu aktiviteler olacak.
-    Aynı zamanda burada ekleme, silme, güncelleme işlemleri yapılacak.</p>
+
+<p>
+    Kullanıcının yönetici olduğu kendisinin oluşturduğu aktiviteler olacak.
+    Aynı zamanda burada ekleme, silme, güncelleme işlemleri yapılacak.
+</p>
+
+@if (ViewData["Message"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewData["Message"]
+    </div>
+}
+
+@if (ViewData["Number"] != null && ViewData["Array"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewData["Number"]
+
+        <ul>
+
+            @foreach (var item in (string[])ViewData["Array"])
+            {
+                <li>@item</li>
+            }
+
+        </ul>
+    </div>
+}
+
+
+
+@*bread crumbs container start*@
+<div class="m-3">
+    <div class="row bg-body-tertiary rounded-3">
+        <nav class="col-8" aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-chevron p-4 my-auto">
+                <li class="breadcrumb-item">
+                    <a class="link-body-emphasis" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-house" style="font-size: 1.1rem;"></i>
+                        <span class="visually-hidden">Home</span>
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="link-body-emphasis fw-semibold text-decoration-none" asp-controller="Event" asp-action="Events">Etkinlikler</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    Oluşturduğunuz Etkinlikler
+                </li>
+            </ol>
+        </nav>
+        <form class="m-3 col" role="search">
+            <input type="search" class="form-control" placeholder="Ara..." aria-label="Search">
+        </form>
+    </div>
+</div>
+
+@*Main-content-start*@
+
+<div class="album py-4 bg-body-tertiary rounded-3">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+            @if (Model == null || Model.Count == 0)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Uyarı! Henüz hiçbir etkinlik oluşturmadınız.</h4>
+                    <hr>
+                    <p class="mb-0">Etkinlik oluşturmak için <a asp-controller="Event" asp-action="EventAdder">buraya</a> tıklayınız.</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var e in Model)
+                {
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            </svg>
+                            <div class="card-body">
+                                <p class="card-text">@e.event_description</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                                            <a class="text-decoration-none text-secondary" asp-controller="Event" asp-action="EventView">Görüntüle</a>
+                                        </button>
+                                        @if (SignInManager.IsSignedIn(User))
+                                        {
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                                                <a class="text-decoration-none text-secondary" asp-area="" asp-page="/ActivityPages/ActivityAddPage/ActivityAdd">Düzenle</a>
+                                            </button>
+                                        }
+                                    </div>
+                                    <small class="text-body-secondary">@e.event_date</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        @*Pagination-buttons*@
+        <div class="row m-2 justify-content-center">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

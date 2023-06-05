@@ -4,25 +4,47 @@
 
     }
 
-<h1> Üyelerimiz </h1>
-<p>
-    Mevcut tüm üyeler listelenecek.
-</p>
+<div class="bg-light  text-center overflow-hidden">
+    <div class="my-4 p-3">
+        <h2 class="display-5">Üyelerimiz</h2>
+        <p class="lead">Bizi sürekli destekleyen üyelerimize teşekkür ederiz.</p>
+    </div>
+    <div class="bg-dark shadow-sm mx-auto" style="width: 80%; border-radius: 21px 21px 0 0;">
 
-@if (Model == null || Model.Count == 0)
-{
-    <p>Üye bulunamadı</p>
-}
-else
-{
-    foreach (var index in Model)
-    {
-        <div>
-            <h1> Üye </h1>
-            <p>@index.UserName</p>
-            <p>@index.UserSurname</p>
-            <p>@index.UserEmail</p>
-            <p>@index.UserPhone</p>
+        <div class="table-responsive mt-5 p-5">
+            <table class="table table-bordered table-dark">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">İsim</th>
+                    <th scope="col">Soyisim</th>
+                    <th scope="col">İletişim</th>
+                    <th scope="col">Hakkında</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                @if (Model == null || Model.Count == 0)
+                {
+                    <p>Üye bulunamadı</p>
+                }
+                else
+                {
+                    var i = 0;
+                    foreach (var index in Model)
+                    {
+                        i++;
+                        <tr>
+                            <th scope="row">@(i)</th>
+                            <td>@index.UserName</td>
+                            <td>@index.UserSurname</td>
+                            <td>@index.UserEmail</td>
+                            <td>@index.UserBio</td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
         </div>
-    }
-}
+    </div>
+</div>
