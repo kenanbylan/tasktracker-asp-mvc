@@ -1,0 +1,22 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    ViewData["Title"] = "Profiliniz";
+}
+
+<h1> Profil Sayfası olacak</h1>
+
+<p> Kullanıcının profil bilgileri olacak. </p>
+
+//Kullanici varsa id'sini bastır.
+
+@if (SignInManager.IsSignedIn(User))
+{
+    Console.WriteLine("User is signed in");
+    var user = await UserManager.GetUserAsync(User);
+    Console.WriteLine(user.Id);
+    <p> Kullanıcı id'si: @user.Id </p>
+    <p> Kullanıcı email: @user.Email</p>                                   
+}

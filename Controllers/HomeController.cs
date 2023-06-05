@@ -19,8 +19,7 @@ public class HomeController : Controller
     
     public IActionResult Index()
     {
-        var events = _context.Events.ToList();
-        return View(events);
+        return View();
     }
     
 
