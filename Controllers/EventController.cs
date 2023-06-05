@@ -23,7 +23,15 @@ public class EventController : Controller
 
     public IActionResult EventsUser()
     {
-        return View();
+        var message = "Events";
+        var number = 2;
+        ViewData["Message"] = message;
+        ViewData["Number"] = number;
+        
+        var array = new[] {"one", "two", "three"};
+        ViewData["Array"] = array;
+        
+        return (IActionResult) View();
     }
 
     public IActionResult EventsJoinUser()

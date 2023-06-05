@@ -5,3 +5,28 @@
     <h1> Oluşturduğunuz Tüm aktiviteler </h1>
 <p> Kullanıcının yönetici olduğu kendisinin oluşturduğu aktiviteler olacak.
     Aynı zamanda burada ekleme, silme, güncelleme işlemleri yapılacak.</p>
+    
+    @if(ViewData["Message"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewData["Message"]
+        </div>
+    }
+
+    @if(ViewData["Number"] != null && ViewData["Array"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewData["Number"]
+            
+            <ul>
+                
+                @foreach (var item in (string[])ViewData["Array"])
+                {
+                    <li>@item</li>
+                }
+
+            </ul>
+        </div>
+    }
+
+    
