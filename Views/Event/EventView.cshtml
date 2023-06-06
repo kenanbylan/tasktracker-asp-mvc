@@ -1,14 +1,7 @@
 @{
-    ViewData["Title"] = "Aktivite Ayrıntıları";
-    string activityName = "";
-    string activityDescription = "";
-    string activityTime = "29.05.2023";
-    string activiyLocation = "";
-    string activityOwner = "";
-    string activityRequirements = "";
-    string activityFee = "10";
-    string activityContactChannel = "";
-    string base64ActivityImage = "";
+
+@model List<tasktracker.Models.Event>
+               
 }
 
 
@@ -35,55 +28,55 @@
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                 <div>
                                     <h6 class="my-0">Etkinlik Adı</h6>
-                                    <small class="text-muted">@activityName</small>
+                                    <small class="text-muted">@ViewBag.ActivityName</small>
                                 </div>
                                 <span class="text-muted">*</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                 <div>
                                     <h6 class="my-0">Etkinlik Açıklamanız</h6>
-                                    <small class="text-muted">@activityDescription</small>
+                                    <small class="text-muted">@ViewBag.ActivityDescription</small>
                                 </div>
                                 <span class="text-muted">*</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                 <div>
                                     <h6 class="my-0">Etkinlik Tarihleriniz</h6>
-                                    <small class="text-muted">@activityTime</small>
+                                    <small class="text-muted">@ViewBag.ActivityTime</small>
                                 </div>
                                 <span class="text-muted">*</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                 <div>
                                     <h6 class="my-0">Etkinlik Konumu</h6>
-                                    <small class="text-muted">@activiyLocation</small>
+                                    <small class="text-muted">@ViewBag.ActivityLocation</small>
                                 </div>
                                 <span class="text-muted">*</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                 <div>
                                     <h6 class="my-0">Etkinlik Başkanı</h6>
-                                    <small class="text-muted">@activityOwner</small>
+                                    <small class="text-muted">@ViewBag.ActivityOwner</small>
                                 </div>
                                 <span class="text-muted">*</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                 <div>
                                     <h6 class="my-0">Etkinlik İletişim Kanalı</h6>
-                                    <small class="text-muted">@activityContactChannel</small>
+                                    <small class="text-muted">@ViewBag.ActivityContactChannel</small>
                                 </div>
                                 <span class="text-muted">*</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between bg-light">
                                 <div class="text-danger">
                                     <h6 class="my-0">Etkinlik Gereksinimleri</h6>
-                                    <small class="text-muted">@activityRequirements</small>
+                                    <small class="text-muted">@ViewBag.ActivityRequirements</small>
                                 </div>
                                 <span class="text-success">*</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between text-warning">
                                 <span>Etkinlik Ücreti (TL)</span>
-                                <strong>@activityFee₺</strong>
+                                <strong>@ViewBag.ActivityFee₺</strong>
                             </li>
                         </ul>
                     </div>
