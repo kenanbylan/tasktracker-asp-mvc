@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using tasktracker.Data;
 
@@ -7,11 +8,13 @@ public class EventController : Controller
 {
     private readonly ILogger<EventController> _logger;
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public EventController(ILogger<EventController> logger, ApplicationDbContext context)
+    public EventController(ILogger<EventController> logger, ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
         _logger = logger;
         _context = context;
+        _userManager = userManager;
     }
     
       
