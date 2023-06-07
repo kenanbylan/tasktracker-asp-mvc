@@ -5,6 +5,7 @@ using tasktracker.Data;
 using tasktracker.Models;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace tasktracker.Controllers
 {
@@ -34,8 +35,8 @@ namespace tasktracker.Controllers
         [HttpGet]
         public IActionResult ProfileID(string id)
         {
-            Console.WriteLine("IDDD : " + id);
-
+            Console.WriteLine("IDDD : "+ id);
+            
             var isAvailable = _context.Profiles.Any(e => e.UserId == id);
 
             if (isAvailable)
@@ -70,33 +71,34 @@ namespace tasktracker.Controllers
         }
 
 
-        /*
-        [HttpPost]
-        public async Task<IActionResult> SaveProfile(Profile profile)
+        public async Task<IActionResult> ProfileAddEventID(int eventId)
         {
-            if (ModelState.IsValid)
+            
+            var user = await _userManager.GetUserAsync(User);
+            
+            // Profil var mı diye kontrol et
+            var existingProfile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == user.Id);
+
+            if (existingProfile != null)
             {
-                _context.Add(profile);
+                //TODO : değiştirilecek
+                var existingEvents = existingProfile.CreatedEvents;
+                var eventList = JsonConvert.DeserializeObject<List<string>>(existingEvents);
+                eventList.Add(eventId.ToString());
+                
+                var updatedEvents = JsonConvert.SerializeObject(eventList);
+                existingProfile.CreatedEvents = updatedEvents;
                 await _context.SaveChangesAsync();
-
-                TempData["SuccessMessage"] = "Profil başarıyla kaydedildi.";
-
-                return RedirectToAction("Members");
+                
             }
             else
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
-                TempData["ErrorMessage"] = "Profil kaydedilirken hata oluştu: " + string.Join(", ", errorMessages);
-
-                Console.WriteLine("Error: " + string.Join(", ", errorMessages));
+                return RedirectToAction("Profile");
             }
 
-            return View("Profile", profile);
+            return View("Profile");
         }
-        */
-
+        
         [HttpPost]
         public async Task<IActionResult> SaveProfile(Profile profile)
         {
@@ -139,8 +141,7 @@ namespace tasktracker.Controllers
 
             return View("Profile", profile);
         }
-
-
+        
         [HttpGet]
         public IActionResult Members()
         {

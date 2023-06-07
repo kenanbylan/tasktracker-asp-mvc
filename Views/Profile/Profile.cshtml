@@ -37,9 +37,9 @@
         @if (SignInManager.IsSignedIn(User))
         {
             var user = await UserManager.GetUserAsync(User);
+            
 
-
-            <form method="post" asp-action="SaveProfile" asp-controller="Profile">
+                       <form method="post" asp-action="SaveProfile" asp-controller="Profile">
                 <div class="border rounded-3 p-3 mt-4">
                     <div class="d-flex flex-column justify-content-center align-items-center">
 
