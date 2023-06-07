@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using tasktracker.Data;
 using tasktracker.Models;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace tasktracker.Controllers
 {
@@ -33,8 +34,8 @@ namespace tasktracker.Controllers
         [HttpGet]
         public IActionResult ProfileID(string id)
         {
-            Console.WriteLine("IDDD : "+ id);
-            
+            Console.WriteLine("IDDD : " + id);
+
             var isAvailable = _context.Profiles.Any(e => e.UserId == id);
 
             if (isAvailable)
@@ -48,18 +49,78 @@ namespace tasktracker.Controllers
                 TempData["ErrorMessage"] = "Profil bulunamadı.";
                 return RedirectToAction("Profile");
             }
-            
+        }
 
-            
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = _context.Profiles.Any(e => e.UserId == id);
+            if (user == false)
+            {
+                TempData["ErrorMessage"] = "Kullanıcı bilgileri zaten doldurulmamış.";
+                return RedirectToAction("Profile");
+            }
+            else
+            {
+                var profile = _context.Profiles.FirstOrDefault(e => e.UserId == id);
+                _context.Profiles.Remove(profile);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Profil bilgileri başarıyla silindi.";
+                return RedirectToAction("Profile");
+            }
         }
 
 
+        /*
         [HttpPost]
         public async Task<IActionResult> SaveProfile(Profile profile)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(profile);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Profil başarıyla kaydedildi.";
+
+                return RedirectToAction("Members");
+            }
+            else
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                TempData["ErrorMessage"] = "Profil kaydedilirken hata oluştu: " + string.Join(", ", errorMessages);
+
+                Console.WriteLine("Error: " + string.Join(", ", errorMessages));
+            }
+
+            return View("Profile", profile);
+        }
+        */
+
+        [HttpPost]
+        public async Task<IActionResult> SaveProfile(Profile profile)
+        {
+            if (ModelState.IsValid)
+            {
+                // Profil var mı diye kontrol et
+                var existingProfile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == profile.UserId);
+
+                if (existingProfile != null)
+                {
+                    // Profil varsa güncelle
+                    existingProfile.UserName = profile.UserName;
+                    existingProfile.UserSurname = profile.UserSurname;
+                    existingProfile.UserEmail = profile.UserEmail;
+                    existingProfile.UserPhone = profile.UserPhone;
+                    existingProfile.UserImage = profile.UserImage;
+                    existingProfile.UserBio = profile.UserBio;
+                }
+                else
+                {
+                    // Profil yoksa ekle
+                    _context.Add(profile);
+                }
+
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "Profil başarıyla kaydedildi.";
