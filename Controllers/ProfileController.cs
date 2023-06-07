@@ -35,8 +35,8 @@ namespace tasktracker.Controllers
         [HttpGet]
         public IActionResult ProfileID(string id)
         {
-            Console.WriteLine("IDDD : "+ id);
-            
+            Console.WriteLine("IDDD : " + id);
+
             var isAvailable = _context.Profiles.Any(e => e.UserId == id);
 
             if (isAvailable)
@@ -60,7 +60,7 @@ namespace tasktracker.Controllers
                 TempData["ErrorMessage"] = "Kullanıcı bilgileri zaten doldurulmamış.";
                 return RedirectToAction("Profile");
             }
-            else 
+            else
             {
                 var profile = _context.Profiles.FirstOrDefault(e => e.UserId == id);
                 _context.Profiles.Remove(profile);
@@ -73,9 +73,8 @@ namespace tasktracker.Controllers
 
         public async Task<IActionResult> ProfileAddEventID(int eventId)
         {
-            
             var user = await _userManager.GetUserAsync(User);
-            
+
             // Profil var mı diye kontrol et
             var existingProfile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == user.Id);
 
@@ -85,22 +84,21 @@ namespace tasktracker.Controllers
                 var existingEvents = existingProfile.CreatedEvents;
                 var eventList = JsonConvert.DeserializeObject<List<string>>(existingEvents);
                 eventList.Add(eventId.ToString());
-                
+
                 var updatedEvents = JsonConvert.SerializeObject(eventList);
                 existingProfile.CreatedEvents = updatedEvents;
 
-                
+
                 //NEW : joined events
                 var existingJoinedEvents = existingProfile.JoinedEvents;
                 var joinedEventList = JsonConvert.DeserializeObject<List<string>>(existingJoinedEvents);
                 joinedEventList.Add(eventId.ToString());
-                
+
                 var updatedEventsJoined = JsonConvert.SerializeObject(joinedEventList);
                 existingProfile.JoinedEvents = updatedEventsJoined;
-                
-                
-                await _context.SaveChangesAsync();
 
+
+                await _context.SaveChangesAsync();
             }
             else
             {
@@ -110,7 +108,7 @@ namespace tasktracker.Controllers
             // return olarak home sayfasına yönlendir
             return RedirectToAction("Index", "Home");
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> SaveProfile(Profile profile)
         {
@@ -153,7 +151,7 @@ namespace tasktracker.Controllers
 
             return View("Profile", profile);
         }
-        
+
         [HttpGet]
         public IActionResult Members()
         {
