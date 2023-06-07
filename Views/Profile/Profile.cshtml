@@ -1,22 +1,78 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@model Profile
+
 
 @{
-    ViewData["Title"] = "Profiliniz";
+    var errorMessage = TempData["ErrorMessage"] as string;
 }
 
-<h1> Profil Sayfası olacak</h1>
 
-<p> Kullanıcının profil bilgileri olacak. </p>
-
-//Kullanici varsa id'sini bastır.
+<h1>Profil Sayfası</h1>
 
 @if (SignInManager.IsSignedIn(User))
 {
-    Console.WriteLine("User is signed in");
     var user = await UserManager.GetUserAsync(User);
-    Console.WriteLine(user.Id);
-    <p> Kullanıcı id'si: @user.Id </p>
-    <p> Kullanıcı email: @user.Email</p>                                   
+    <form method="post" asp-action="SaveProfile" asp-controller="Profile">
+        <div class="border p-3 mt-4">
+            <div class="row">
+                <h2 class="text-primary">Yeni Profil İsmi</h2>
+                <hr />
+            </div>
+            <br />
+            <div class="mb-3">U
+                <label asp-for="UserId"></label>
+                <input asp-for="UserId" value=@user.Id class="form-control"/>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="UserSurname"></label>
+                <input asp-for="UserSurname" class="form-control" />
+                <span asp-validation-for="UserSurname" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="UserImage"></label>
+                <input asp-for="UserImage" class="form-control" />
+                <span asp-validation-for="UserImage" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="UserEmail"></label>
+                <input asp-for="UserEmail" class="form-control" />
+                <span asp-validation-for="UserEmail" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="UserPhone"></label>
+                <input asp-for="UserPhone" class="form-control" />
+                <span asp-validation-for="UserPhone" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="UserBio"></label>
+                <input asp-for="UserBio" class="form-control" />
+                <span asp-validation-for="UserBio" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="JoinedEvents"></label>
+                <input asp-for="JoinedEvents" class="form-control" />
+                <span asp-validation-for="JoinedEvents" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="CreatedEvents"></label>
+                <input asp-for="CreatedEvents" class="form-control" />
+                <span asp-validation-for="CreatedEvents" class="text-danger"></span>
+            </div>
+            <br />
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+    </form>
+    
+    <p>@errorMessage</p>
+    
+    
 }

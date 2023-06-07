@@ -17,6 +17,7 @@ public class Event
     public string event_requirement { get; set; }
     public int event_fee { get; set; }
     public bool event_active { get; set; }
+    
     public int number_members { get; set; }
     public string event_membersID { get; set; }
 }
