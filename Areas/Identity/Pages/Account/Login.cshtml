@@ -1,0 +1,63 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Giriş Yapın";
+}
+
+
+<div class="container vh-100">
+    <div class="d-flex align-items-center flex-column">
+
+        <h1 class="my-5">@ViewData["Title"]</h1>
+        <h4 class="my-2">Sistemimize giriş yapın ve ayrıcalıklardan yararlanın. :)</h4>
+
+        <div class="row w-50">
+            <div class="col">
+                <section>
+                    <form id="account" method="post">
+                        <hr/>
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com"/>
+                            <label asp-for="Input.Email" class="form-label">Email</label>
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password"/>
+                            <label asp-for="Input.Password" class="form-label">Şifre</label>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                        <div class="checkbox mb-3">
+                            <label asp-for="Input.RememberMe" class="form-label">
+                                <input class="form-check-input" asp-for="Input.RememberMe"/>
+                                @*beni hatırla*@
+                                <span>Beni Hatırla</span>
+                                @*@Html.DisplayNameFor(m => m.Input.RememberMe)*@
+                            </label>
+                        </div>
+                        <div>
+                            <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-dark">Giriş Yapın</button>
+                        </div>
+                        <div class="mt-4 d-flex flex-row justify-content-between ">
+                            <p>
+                                <a class="btn btn-sm btn-secondary" role="button" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Yeni bir kullanıcı kaydı oluştur.</a>
+                            </p>
+                            <p>
+                                <a class="btn btn-sm btn-outline-secondary disabled" role="button" aria-disabled="true" id="forgot-password" asp-page="./ForgotPassword">Şifremi Unuttum!</a>
+                            </p>
+                            <p>
+                                <a class="btn btn-sm btn-outline-secondary disabled" role="button" aria-disabled="true" id="resend-confirmation" asp-page="./ResendEmailConfirmation">E-posta onayını tekrar gönder.</a>
+                            </p>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

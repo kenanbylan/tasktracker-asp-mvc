@@ -1,0 +1,36 @@
+﻿@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
+    {
+        Layout = parentLayout.ToString();
+    }
+    else
+    {
+        // Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+        Layout = "/Views/Shared/_Layout.cshtml";
+    }
+}
+
+
+<div class="container vh-50">
+    <div class="row m-5">
+
+        <h1>Profilim</h1>
+        <h5>Buradan hesap ayarlarınızı yapabilirsiniz.</h5>
+        <hr/>
+
+        <div>
+            <div class="row m-2around">
+                <div class="col-md-3">
+                    <partial name="_ManageNav"/>
+                </div>
+                <div class="col-md-9">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
