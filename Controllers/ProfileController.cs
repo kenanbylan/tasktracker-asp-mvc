@@ -60,7 +60,7 @@ namespace tasktracker.Controllers
                 TempData["ErrorMessage"] = "Kullanıcı bilgileri zaten doldurulmamış.";
                 return RedirectToAction("Profile");
             }
-            else
+            else 
             {
                 var profile = _context.Profiles.FirstOrDefault(e => e.UserId == id);
                 _context.Profiles.Remove(profile);
@@ -88,8 +88,19 @@ namespace tasktracker.Controllers
                 
                 var updatedEvents = JsonConvert.SerializeObject(eventList);
                 existingProfile.CreatedEvents = updatedEvents;
-                await _context.SaveChangesAsync();
+
                 
+                //NEW : joined events
+                var existingJoinedEvents = existingProfile.JoinedEvents;
+                var joinedEventList = JsonConvert.DeserializeObject<List<string>>(existingJoinedEvents);
+                joinedEventList.Add(eventId.ToString());
+                
+                var updatedEventsJoined = JsonConvert.SerializeObject(joinedEventList);
+                existingProfile.JoinedEvents = updatedEventsJoined;
+                
+                
+                await _context.SaveChangesAsync();
+
             }
             else
             {

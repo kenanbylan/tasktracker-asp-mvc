@@ -35,7 +35,6 @@ public class EventController : Controller
 
     
     
-    
     //Convert Base64 to Image function 
     public byte[] ConvertBase64ToBytes(string base64Image)
     {
@@ -82,7 +81,9 @@ public class EventController : Controller
         ViewBag.ActivityDescription = eventItem.event_description;
         ViewBag.ActivityTime = eventItem.event_date;
         ViewBag.ActivityLocation = eventItem.event_location;
-        ViewBag.ActivityOwner = eventItem.event_ownerID;
+        var userProfile = _context.Profiles.FirstOrDefault(p => p.UserId == eventItem.event_ownerID);
+        ViewBag.ActivityOwner = userProfile.UserName + " " +  userProfile.UserSurname;
+        
         ViewBag.ActivityRequirements = eventItem.event_requirement;
         ViewBag.ActivityFee = eventItem.event_fee;
         //ViewBag.ActivityContactChannel = eventItem.event_contactChannel;
