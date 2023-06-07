@@ -1,9 +1,12 @@
+@using Microsoft.AspNetCore.Identity
+@using tasktracker.Data
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject ApplicationDbContext _context
+
 @{
-
-@model List<tasktracker.Models.Event>
-               
+    @model List<tasktracker.Models.Event>
 }
-
 
 <div class="bg-dark text-center text-white overflow-hidden">
     <div class="my-3 py-3">
@@ -33,10 +36,12 @@
                                 <span class="text-muted">*</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                
                                 <div>
                                     <h6 class="my-0">Etkinlik Açıklamanız</h6>
                                     <small class="text-muted">@ViewBag.ActivityDescription</small>
                                 </div>
+                                
                                 <span class="text-muted">*</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
@@ -54,8 +59,10 @@
                                 <span class="text-muted">*</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                
                                 <div>
                                     <h6 class="my-0">Etkinlik Başkanı</h6>
+                                    
                                     <small class="text-muted">@ViewBag.ActivityOwner</small>
                                 </div>
                                 <span class="text-muted">*</span>

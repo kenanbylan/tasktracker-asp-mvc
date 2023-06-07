@@ -1,39 +1,14 @@
 @using Microsoft.AspNetCore.Identity
+@using tasktracker.Data
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@{
+@inject ApplicationDbContext _context
+
+
+@{ 
     ViewData["Title"] = "Yönetici Olduğunuz Aktiviteler";
+    @model List<tasktracker.Models.Event>
 }
-
-
-<p>
-    Kullanıcının yönetici olduğu kendisinin oluşturduğu aktiviteler olacak.
-    Aynı zamanda burada ekleme, silme, güncelleme işlemleri yapılacak.
-</p>
-
-@if (ViewData["Message"] != null)
-{
-    <div class="alert alert-success" role="alert">
-        @ViewData["Message"]
-    </div>
-}
-
-@if (ViewData["Number"] != null && ViewData["Array"] != null)
-{
-    <div class="alert alert-danger" role="alert">
-        @ViewData["Number"]
-
-        <ul>
-
-            @foreach (var item in (string[])ViewData["Array"])
-            {
-                <li>@item</li>
-            }
-
-        </ul>
-    </div>
-}
-
 
 
 @*bread crumbs container start*@
@@ -61,50 +36,67 @@
     </div>
 </div>
 
-@*Main-content-start*@
 
+@*Main-content-start*@
 <div class="album py-4 bg-body-tertiary rounded-3">
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
-            @if (Model == null || Model.Count == 0)
+            @if (SignInManager.IsSignedIn(User))
+            {
+                var user = await UserManager.GetUserAsync(User);
+                var events =  _context.Events.Where(e => e.event_ownerID == user.Id).ToList();
+               
+                
+                @if (Model == null || Model.Count == 0)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">Uyarı! Henüz hiçbir etkinlik oluşturmadınız.</h4>
+                        <hr>
+                        <p class="mb-0">Etkinlik oluşturmak için <a asp-controller="Event" asp-action="EventAdder">buraya</a> tıklayınız.</p>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var e in events)
+                    {
+                        <div class="col">
+                            
+                            <div class="card shadow-sm">
+                                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                    <title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                                </svg>
+                                <div class="card-body">
+                                    <p class="card-text">@e.event_description</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary"><a class="text-decoration-none text-secondary" asp-controller="Event" asp-action="EventView" asp-route-id="@e.event_id">Görüntüle</a></button>
+                                            <button type="button" class="btn btn-sm btn-outline-info" ><a href="#" class="btn text-decoration-none btn-sm text-primary" onclick="toggleDescription(@e.event_id)">Daha Fazla Göster</a> </button>
+
+                                            @if (SignInManager.IsSignedIn(User))
+                                            {
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">
+                                                    <a class="text-decoration-none text-secondary" asp-area="" asp-page="/ActivityPages/ActivityAddPage/ActivityAdd">Düzenle</a>
+                                                </button>
+                                            }
+                                        </div>
+                                        <small class="text-body-secondary">@e.event_date</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                }
+            }
+            } 
+            else
             {
                 <div class="alert alert-danger" role="alert">
                     <h4 class="alert-heading">Uyarı! Henüz hiçbir etkinlik oluşturmadınız.</h4>
                     <hr>
                     <p class="mb-0">Etkinlik oluşturmak için <a asp-controller="Event" asp-action="EventAdder">buraya</a> tıklayınız.</p>
-                </div>
-            }
-            else
-            {
-                @foreach (var e in Model)
-                {
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div class="card-body">
-                                <p class="card-text">@e.event_description</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">
-                                            <a class="text-decoration-none text-secondary" asp-controller="Event" asp-action="EventView">Görüntüle</a>
-                                        </button>
-                                        @if (SignInManager.IsSignedIn(User))
-                                        {
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">
-                                                <a class="text-decoration-none text-secondary" asp-area="" asp-page="/ActivityPages/ActivityAddPage/ActivityAdd">Düzenle</a>
-                                            </button>
-                                        }
-                                    </div>
-                                    <small class="text-body-secondary">@e.event_date</small>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                }
             }
+            
         </div>
 
         @*Pagination-buttons*@
