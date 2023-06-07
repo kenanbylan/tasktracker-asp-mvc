@@ -69,7 +69,7 @@ public class EventController : Controller
     public IActionResult EventView(int id)
     {
         
-        Console.WriteLine("IDDD : "+ id);
+        Console.WriteLine("IDDD : " + id);
         
         var eventItem = _context.Events.FirstOrDefault(e => e.event_id == id);
         if (eventItem == null)
