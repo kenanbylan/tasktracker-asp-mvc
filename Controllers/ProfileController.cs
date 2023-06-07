@@ -14,7 +14,8 @@ namespace tasktracker.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public ProfileController(ILogger<ProfileController> logger, ApplicationDbContext context, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public ProfileController(ILogger<ProfileController> logger, ApplicationDbContext context,
+            SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _context = context;
@@ -27,28 +28,43 @@ namespace tasktracker.Controllers
         {
             return View();
         }
-        
-        
+
+        // ilgili id girişi yapılarak profil bilgileri getirilir
+        [HttpGet]
+        public IActionResult ProfileID(string id)
+        {
+            Console.WriteLine("IDDD : "+ id);
+            
+            var isAvailable = _context.Profiles.Any(e => e.UserId == id);
+
+            if (isAvailable)
+            {
+                var profile = _context.Profiles.FirstOrDefault(e => e.UserId == id);
+                ViewBag.Profile = profile;
+                return View("Profile", profile);
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Profil bulunamadı.";
+                return RedirectToAction("Profile");
+            }
+            
+
+            
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> SaveProfile(Profile profile)
         {
             if (ModelState.IsValid)
             {
-                
-                var user = await _userManager.GetUserAsync(User);
+                _context.Add(profile);
+                await _context.SaveChangesAsync();
 
-                if (user != null)
-                {
-                    profile.UserId = user.Id;
-                    Console.WriteLine("User ID: " + profile.UserId);
+                TempData["SuccessMessage"] = "Profil başarıyla kaydedildi.";
 
-                    _context.Add(profile);
-                    await _context.SaveChangesAsync();
-
-                    TempData["SuccessMessage"] = "Profil başarıyla kaydedildi.";
-
-                    return RedirectToAction("Members");
-                }
+                return RedirectToAction("Members");
             }
             else
             {
@@ -62,8 +78,6 @@ namespace tasktracker.Controllers
 
             return View("Profile", profile);
         }
-
-
 
 
         [HttpGet]
