@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using tasktracker.Data;
+using tasktracker.Models;
 
 namespace tasktracker.Controllers;
 
@@ -19,7 +21,7 @@ public class EventController : Controller
     
       
     // EventController.cs
-
+    
     public IActionResult SearchEvents(string searchText)
     {
         var events = _context.Events.ToList();
@@ -94,4 +96,44 @@ public class EventController : Controller
     {
         return View();
     }
+    
+    
+    // POST: Event/CreateEvent
+    [HttpPost]
+    public async Task<ActionResult> SaveEvent(Event model)
+    {
+        var userId = _userManager.GetUserId(User);
+        
+        if (!string.IsNullOrEmpty(userId))
+        {
+            
+            if (ModelState.IsValid)
+            {
+                _context.Events.Add(model); 
+                await _context.SaveChangesAsync();
+             
+                return RedirectToAction("ProfileAddEventID", "Profile", new { eventId = model.event_id });
+
+            }  else {
+                
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+
+                TempData["ErrorMessage"] = "Profil kaydedilirken hata oluştu: " + string.Join(", ", errorMessages);
+                Console.WriteLine("Error: " + string.Join(", ", errorMessages));
+            }
+        }
+        else
+        {
+            Console.WriteLine("User ID is empty.");
+        }
+
+      
+        return View("EventAdder", model);
+    }
+
+
+    
+    
 }
