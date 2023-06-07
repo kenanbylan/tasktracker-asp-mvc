@@ -93,19 +93,9 @@
                             <span asp-validation-for="CreatedEvents" class="text-danger"></span>
                         </div>
                         <br/>
-
-                        @if (ViewBag.Profile != null)
-                        {
-                            <div class="col-9 mb-3">
-                                <button type="submit" class="btn btn-dark" disabled>Güncelle</button>
-                            </div>
-                        }
-                        else if (ViewBag.Profile == null)
-                        {
-                            <div class="col-9 mb-3">
-                                <button type="submit" class="btn btn-dark">Kaydet</button>
-                            </div>
-                        }
+                        <div class="col-9 mb-3">
+                            <button type="submit" class="btn btn-dark"> Kayıt / Güncelle</button>
+                        </div>
                     </div>
                 </div>
             </form>
