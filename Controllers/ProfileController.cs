@@ -107,7 +107,8 @@ namespace tasktracker.Controllers
                 return RedirectToAction("Profile");
             }
 
-            return View("Profile");
+            // return olarak home sayfasına yönlendir
+            return RedirectToAction("Index", "Home");
         }
         
         [HttpPost]
