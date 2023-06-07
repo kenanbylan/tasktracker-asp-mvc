@@ -48,9 +48,24 @@ namespace tasktracker.Controllers
                 TempData["ErrorMessage"] = "Profil bulunamadı.";
                 return RedirectToAction("Profile");
             }
-            
-
-            
+        }
+        
+        public async Task<IActionResult> DeleteUser (string id)
+        {
+            var user = _context.Profiles.Any(e => e.UserId == id);
+            if (user == false)
+            {
+                TempData["ErrorMessage"] = "Kullanıcı bilgileri zaten doldurulmamış.";
+                return RedirectToAction("Profile");
+            }
+            else
+            {
+                var profile = _context.Profiles.FirstOrDefault(e => e.UserId == id);
+                _context.Profiles.Remove(profile);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Profil bilgileri başarıyla silindi.";
+                return RedirectToAction("Profile");
+            }
         }
 
 
