@@ -87,7 +87,7 @@ public class EventController : Controller
         ViewBag.ActivityRequirements = eventItem.event_requirement;
         ViewBag.ActivityFee = eventItem.event_fee;
         //ViewBag.ActivityContactChannel = eventItem.event_contactChannel;
-        //ViewBag.Base64ActivityImage = "";
+        ViewBag.Base64ActivityImage = eventItem.event_image;
         
         return View();
     }
