@@ -69,8 +69,7 @@ namespace tasktracker.Controllers
                 return RedirectToAction("Profile");
             }
         }
-
-
+        
         public async Task<IActionResult> ProfileAddEventID(int eventId)
         {
             var user = await _userManager.GetUserAsync(User);

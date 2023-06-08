@@ -36,6 +36,12 @@ public class EventController : Controller
     }
 
 
+    public IActionResult EventsJoinUser()
+    {
+        return View();
+
+    }
+
     //Convert Base64 to Image function 
     public byte[] ConvertBase64ToBytes(string base64Image)
     {
@@ -50,7 +56,8 @@ public class EventController : Controller
         var events = _context.Events.ToList();
         return View(events);
     }
-
+  
+  
     // Aktif Kullaniciya ait olusturulmus etkinlikleri listeler
     public IActionResult EventsUser()
     {
@@ -59,11 +66,24 @@ public class EventController : Controller
     }
 
     //Aktif Kullanicinin katildigi - katilacaği etkinlikleri listeler
-    public IActionResult EventsJoinUser()
+    
+    
+    public async Task<IActionResult> EventsUserLeave(int eventId)
     {
-        var events = _context.Events.ToList();
-        return View(events);
+        var user = await _userManager.GetUserAsync(User);
+        var userProfile = _context.Profiles.FirstOrDefault(p => p.UserId == user.Id);
+    
+        var joinedEventsArray = JsonConvert.DeserializeObject<List<int>>(userProfile.JoinedEvents);
+        joinedEventsArray.Remove(eventId);
+    
+        var updatedJoinedEventsString = JsonConvert.SerializeObject(joinedEventsArray);
+        userProfile.JoinedEvents = updatedJoinedEventsString;
+    
+        await _context.SaveChangesAsync();
+    
+        return RedirectToAction("Index", "Home");
     }
+
 
 
     //Bir etkinlik ayrintilarini gosterir
@@ -137,7 +157,7 @@ public class EventController : Controller
     {
         var user = await _userManager.GetUserAsync(User);
         var userProfile = _context.Profiles.FirstOrDefault(p => p.UserId == user.Id);
-  
+        
         // JoinedEvents sütunundaki değeri ayrıştırın
         var joinedEventsArray = JsonConvert.DeserializeObject<List<int>>(userProfile.JoinedEvents);
 
