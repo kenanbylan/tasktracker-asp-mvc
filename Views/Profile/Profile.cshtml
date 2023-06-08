@@ -1,22 +1,104 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@model Profile
+
 
 @{
-    ViewData["Title"] = "Profiliniz";
+    var errorMessage = TempData["ErrorMessage"] as string;
+    ViewData["Title"] = "Kullanıcı Bilgileriniz";
+
 }
 
-<h1> Profil Sayfası olacak</h1>
 
-<p> Kullanıcının profil bilgileri olacak. </p>
+<div class="container mb-5">
+    <div class="d-flex flex-column">
 
-//Kullanici varsa id'sini bastır.
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger mt-5" role="alert">
+                <p>@errorMessage</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-@if (SignInManager.IsSignedIn(User))
-{
-    Console.WriteLine("User is signed in");
-    var user = await UserManager.GetUserAsync(User);
-    Console.WriteLine(user.Id);
-    <p> Kullanıcı id'si: @user.Id </p>
-    <p> Kullanıcı email: @user.Email</p>                                   
-}
+        @* eğer kayıt başarılıysa göster*@
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success mt-5" role="alert">
+                <p>@TempData["SuccessMessage"]</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <h2 class="mt-3">@ViewData["Title"]</h2>
+        <p class="my-3"> Kullanıcı bilgilerinizi buradan doldurarak etkinliklere katılabilirsiniz.</p>
+
+        @if (SignInManager.IsSignedIn(User))
+        {
+            var user = await UserManager.GetUserAsync(User);
+            
+
+                       <form method="post" asp-action="SaveProfile" asp-controller="Profile">
+                <div class="border rounded-3 p-3 mt-4">
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+
+                        <div class="col-9 mb-3 d-none">
+                            <label asp-for="UserId">Kullanıcı Kimlik Numaranız</label>
+                            <input asp-for="UserId" value=@user.Id class="form-control"/>
+                            @* <span asp-validation-for="UserId" class="text-danger"></span> *@
+                        </div>
+
+                        <div class="col-9 mb-3">
+                            <label asp-for="UserName">İsminiz</label>
+                            <input asp-for="UserName" class="form-control"/>
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <div class="col-9 mb-3">
+                            <label asp-for="UserSurname">Soy İsminiz</label>
+                            <input asp-for="UserSurname" class="form-control"/>
+                            <span asp-validation-for="UserSurname" class="text-danger"></span>
+                        </div>
+                        <div class="col-9 mb-3">
+                            <label asp-for="UserImage">
+                                Kullanıcı Profil Resminiz
+                                <span class="text-secondary fst-italic">(Şimdilik base64 formatında giriş yapınız.)</span>
+                            </label>
+                            <input asp-for="UserImage" class="form-control"/>
+                            <span asp-validation-for="UserImage" class="text-danger"></span>
+                        </div>
+                        <div class="col-9 mb-3">
+                            <label asp-for="UserEmail">İletişim E-posta Adresiniz</label>
+                            <input asp-for="UserEmail" class="form-control"/>
+                            <span asp-validation-for="UserEmail" class="text-danger"></span>
+                        </div>
+                        <div class="col-9 mb-3">
+                            <label asp-for="UserPhone">Telofon Numaranız</label>
+                            <input asp-for="UserPhone" class="form-control"/>
+                            <span asp-validation-for="UserPhone" class="text-danger"></span>
+                        </div>
+                        <div class="col-9 mb-3">
+                            <label asp-for="UserBio">Hakkınızda</label>
+                            <input asp-for="UserBio" class="form-control"/>
+                            <span asp-validation-for="UserBio" class="text-danger"></span>
+                        </div>
+                        <div class="col-9 mb-3 d-none">
+                            <label asp-for="JoinedEvents">Katıldığınız Etkinlik Numaraları</label>
+                            <input asp-for="JoinedEvents" class="form-control" value="[]"/>
+                            <span asp-validation-for="JoinedEvents" class="text-danger"></span>
+                        </div>
+                        <div class="col-9 mb-3 d-none">
+                            <label asp-for="CreatedEvents">Oluşturduğunuz Etkinlik Numaraları</label>
+                            <input asp-for="CreatedEvents" class="form-control" value="[]"/>
+                            <span asp-validation-for="CreatedEvents" class="text-danger"></span>
+                        </div>
+                        <br/>
+                        <div class="col-9 mb-3">
+                            <button type="submit" class="btn btn-dark"> Kayıt / Güncelle</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+</div>

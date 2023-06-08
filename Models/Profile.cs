@@ -1,36 +1,19 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace tasktracker.Models;
-
-public class Profile
+namespace tasktracker.Models
 {
-    [Key]
-    [Display(Name = "user_id")]
-    public string UserId { get; set; }
-
-    [Display(Name = "user_name")]
-    public string UserName { get; set; }
-
-    [Display(Name = "user_surname")]
-    public string UserSurname { get; set; }
-
-    [Display(Name = "user_image")]
-    public string UserImage { get; set; }
-
-    [Display(Name = "user_email")]
-    public string UserEmail { get; set; }
-
-    [Display(Name = "user_phone")]
-    public string UserPhone { get; set; }
-
-    [Display(Name = "user_bio")]
-    public string UserBio { get; set; }
-
-    [Display(Name = "joined_events")]
-    public string JoinedEvents { get; set; }
-
-    [Display(Name = "created_events")]
-    public string CreatedEvents { get; set; }
-    
-    
+    public class Profile
+    {
+        [Key]
+        public string UserId { get; set; }
+        
+        public string UserName { get; set; }
+        public string UserSurname { get; set; }
+        public string UserImage { get; set; }
+        public string UserEmail { get; set; }
+        public string UserPhone { get; set; }
+        public string UserBio { get; set; }
+        public string JoinedEvents { get; set; }
+        public string CreatedEvents { get; set; }
+    }
 }

@@ -1,31 +1,30 @@
-﻿@page
+@page
 @model IndexModel
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @{
     ViewData["Title"] = "Profil";
     ViewData["ActivePage"] = ManageNavPages.Index;
+    var user = await UserManager.GetUserAsync(User);
 }
 
-<partial name="_StatusMessage" for="StatusMessage" />
+<partial name="_StatusMessage" for="StatusMessage"/>
 <div class="row justify-content-center">
     <div class="col-md-10">
-        <h3 class="mb-3">@ViewData["Title"]</h3>
-        
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
-                <label asp-for="Username" class="form-label"></label>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
-                <label asp-for="Input.PhoneNumber" class="form-label">Telefon numaram</label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-dark">Kaydet</button>
-        </form>
+        <h3 class="m-3">@ViewData["Title"]</h3>
+        @if (user.Id != null)
+        {
+            <buton class="btn btn-sm btn-dark m-1">
+                <a asp-controller="Profile" asp-action="ProfileID" asp-route-id="@user.Id" class="text-white text-decoration-none">Profile gitmek istiyorum</a>
+            </buton>
+            <button class="btn btn-sm btn-danger m-1">
+                <a class="text-white text-decoration-none" asp-controller="Profile" asp-action="DeleteUser" asp-route-id="@user.Id"> Bilgilerimi Sistemden Sil</a>
+            </button>
+        }
     </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }

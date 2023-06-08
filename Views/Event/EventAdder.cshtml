@@ -1,24 +1,36 @@
+@using Microsoft.AspNetCore.Identity
+@using tasktracker.Data
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model Event
+@inject ApplicationDbContext _context
+
 @{
     ViewData["Title"] = "Etkinliğinizi Oluşturun";
+
     string activityName = "";
     string activityDescription = "";
     string activityTime = "29.05.2023";
     string activiyLocation = "";
     string activityOwner = "";
     string activityRequirements = "";
-    string activityFee = "10";
+    string activityFee = "";
     string activityContactChannel = "";
-    string base64ActivityImage= "";
+    string base64ActivityImage = "";
+
+    var userId = UserManager.GetUserId(User);
+    var profile = _context.Profiles.FirstOrDefault(e => e.UserId == userId);
 }
 
 
 <div class="container">
     <div class="py-5 text-center">
-        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <img class="d-block mx-auto mb-4 bg-black rounded-3" src="~/images/Logo.png" alt="" width="72" height="72">
         <h2>Tasktrackr ile Etkinlik Oluştur</h2>
         <p class="lead">
             Merhaba!
-            Formu doldurarak, herkese açık insanların bir araya gelebileceği etkinlikler düzenleyebilir ve katılımcılarla iletişim kurabilirsin.</p>
+            Formu doldurarak, herkese açık insanların bir araya gelebileceği etkinlikler düzenleyebilir ve katılımcılarla iletişim kurabilirsin.
+        </p>
     </div>
 
     <div class="row">
@@ -83,91 +95,114 @@
                 </li>
             </ul>
 
-            
+
         </div>
 
 
         <div class="col-md-8 order-md-1">
             <h4 class="mb-3">Etkinlik Bilgileri</h4>
-            <form class="needs-validation" novalidate="">
+            <form method="post" asp-action="SaveEvent" asp-controller="Event">
 
-                <div class="mb-3">
-                    <label for=activity-name>Etkinlik Adı</label>
-                    <input type="text" class="form-control" id="activity-name" placeholder="Yıldız Parkı Bisiklet Sürüşü" value=@activityName>
-                </div>
 
-                <div class="mb-3">
-                    <label for=activity-description>Etkinlik Açıklaması</label>
-                    <textarea type="text" class="form-control" id="activity-description" placeholder="Sahil bisiklet yolları kullanılarak ve aynı zamanda çeşitli ikramlar ile birlikte eğlenceli bir bisiklet sürüş organizasyonudur." value=@activityDescription></textarea>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    var user = await UserManager.GetUserAsync(User);
 
-                        <label for="firstName">Etkinlik Başkanı Adı ve Soyadı</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="Ahmet Aslan" value=@activityOwner>
-                        <div class="invalid-feedback">
-                            Valid first name is required.
+
+                    <div class="border rounded-3 p-4 mt-4">
+
+                        <div class="mb-3 d-none">
+                            <label asp-for="event_ownerID">Etkinlik Oluşturucu ID</label>
+                            <input asp-for="event_ownerID" value="@user.Id" class="form-control"/>
+                            <span asp-validation-for="event_ownerID" class="text-danger"></span>
                         </div>
-                    </div>
 
-                    <div class="col-md-6 mb-3">
 
-                        <label for="email">Etkinlik İletişim Kanalı</label>
-                        <input type="email" class="form-control" id="email" placeholder="you@example.com">
-                        <div class="invalid-feedback">
-                            Please enter a valid email address for shipping updates.
+                        <div class="mb-3">
+                            <label asp-for="event_name">Etkinlik Adı</label>
+                            <input asp-for="event_name" class="form-control" placeholder="Yıldız Parkı Bisiklet Sürüşü"/>
+                            <span asp-validation-for="event_name" class="text-danger"></span>
                         </div>
-                    </div>
 
-                </div>
-
-
-
-                <div class="mb-3">
-                    <label for="address">Etkinlik Konumu</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">📌</span>
+                        <div class="mb-3">
+                            <label asp-for="event_description">Etkinlik Açıklaması</label>
+                            <textarea asp-for="event_description" type="text" class="form-control" id="activity-description" placeholder="Sahil bisiklet yolları kullanılarak ve aynı zamanda çeşitli ikramlar ile birlikte eğlenceli bir bisiklet sürüş organizasyonudur." ></textarea>
+                            <span asp-validation-for="event_description" class="text-danger"></span>
                         </div>
-                        <input type="text" class="form-control" id="address" placeholder="Marmara Üniversitesi Maltepe/İstanbul" required="">
-                        <div class="invalid-feedback" style="width: 100%;">
-                            Please enter your address.
+
+                        <div class="mb-3">
+                            <label asp-for="event_image">Etkinlik Resmi <span class="text-secondary fst-italic"> (Şimdilik base64 formatında giriş yapınız.)</span></label>
+                            <input asp-for="event_image" class="form-control"
+                                   value="[]"/>
+                            <span asp-validation-for="event_image" class="text-danger"></span>
                         </div>
-                    </div>
-                </div>
 
-                <div class="mb-3">
-                    <label for="activity-requirements">Etkinlik Gereksinimleri</label>
-                    <input type="text" class="form-control" id="activity-requirements" placeholder="Marmara Üniversitesi Öğrencisi Olmak tek koşuldur." required="">
-                    <div class="invalid-feedback">
-                        Please enter activity requirements.
-                    </div>
-                </div>
-                <hr class="mb-4">
+                        <div class="mb-3">
+                            <label asp-for="event_location">Etkinlik Konumu</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">📌</span>
+                                </div>
 
-                <h5 class="mb-3">Etkinlik Ücreti</h5>
+                                <input asp-for="event_location" class="form-control" placeholder="Marmara Üniversitesi Maltepe/İstanbul"/>
+                                <span asp-validation-for="event_location" class="text-danger"></span>
 
-                <div class="d-block my-3">
-                    <div class="custom-control custom-radio">
-                        <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="" required="">
-                        <label class="custom-control-label" for="credit">Ücretsiz</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input id="ten" name="paymentMethod" type="radio" class="custom-control-input" required="">
-                        <label class="custom-control-label" for="ten">10</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input id="twenty" name="paymentMethod" type="radio" class="custom-control-input" required="">
-                        <label class="custom-control-label" for="twenty">20</label>
-                    </div>
-                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="event_date">Etkinlik Tarihi</label>
+                            <input asp-for="event_date" class="form-control" placeholder="31.12.2022"/>
+                            <span asp-validation-for="event_date" class="text-danger"></span>
+                        </div>
 
 
-                <hr class="mb-4">
-                <button class="btn btn-dark btn-lg btn-block" type="submit">Etkinliği Oluştur</button>
+                        <div class="mb-3">
+                            <label asp-for="event_requirement">Etkinlik Gereksinimleri</label>
+                            <input asp-for="event_requirement" class="form-control" placeholder="Marmara Üniversitesi Öğrencisi Olmak tek koşuldur."/>
+                            <span asp-validation-for="event_requirement" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-4 mb-3">
+                            <label asp-for="event_fee">Etkinlik Ücreti</label>
+                            <input asp-for="event_fee" class="form-control" placeholder="10"/>
+                            <span asp-validation-for="event_fee" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="col-9 mb-3 d-none">
+                            <label asp-for="event_membersID">Event Members ID</label>
+                            <input asp-for="event_membersID" class="form-control" value="[]"/>
+                            <span asp-validation-for="event_membersID" class="text-danger"></span>
+                        </div>
+
+                        <hr class="mb-4">
+
+
+                        @* Profile(user.Id) --> profile.base64Image *@
+                        @if (profile != null && SignInManager.IsSignedIn(User))
+                        {
+                            <button class="btn btn-dark btn-lg btn-block" type="submit">Etkinliği Oluştur</button>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger mt-5" role="alert">
+                                <p>Etkinlik oluşturmadan öncelikle kullanıcı bilgilerinizi eklemelisiniz!</p>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <button>
+                        <a href="/Identity/Account/Login">Giriş Yap</a>
+                    </button>
+                }
             </form>
         </div>
     </div>
-    <br />
+    <br/>
 </div>
