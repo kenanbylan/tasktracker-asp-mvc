@@ -81,7 +81,8 @@
                                                 <a class="text-decoration-none text-secondary" asp-controller="Event" asp-action="EventView" asp-route-id="@e.event_id">Görüntüle</a>
                                             </button>
                                             <button type="button" class="btn btn-sm btn-outline-info">
-                                                <a href="#" class="btn text-decoration-none btn-sm text-primary" onclick="toggleDescription(@e.event_id)">Daha Fazla Göster</a>
+                                                <a href="#" class="btn text-decoration-none btn-sm text-primary" onclick="toggleDescription(@e.event_id)">Dahası..</a>
+
                                             </button>
 
                                             @if (SignInManager.IsSignedIn(User))

@@ -91,14 +91,20 @@
                                             <a class="text-decoration-none text-secondary" asp-controller="Event" asp-action="EventView" asp-route-id="@e.event_id">Görüntüle</a>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-outline-info">
-                                            <a href="#" class="btn text-decoration-none btn-sm text-primary" onclick="toggleDescription(@e.event_id)">Daha Fazla Göster</a>
+                                            <a href="#" class="btn text-decoration-none btn-sm text-primary" onclick="toggleDescription(@e.event_id)">Dahası...</a>
+
                                         </button>
 
                                         @if (SignInManager.IsSignedIn(User))
                                         {
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">
-                                                <a class="text-decoration-none text-secondary" asp-area="" asp-page="/ActivityPages/ActivityAddPage/ActivityAdd">Katıl</a>
-                                            </button>
+                                            <form method="post" asp-action="JoinEvent" >
+                                                <input type="hidden" name="eventId" value="@e.event_id" />
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                                    <span class="text-decoration-none text-secondary">Katıl</span>
+                                                </button>
+                                            </form>
+    
+
                                         }
                                     </div>
                                     <small class="text-body-secondary">@e.event_date</small>
@@ -139,15 +145,22 @@
                                         <button type="button" class="btn btn-sm btn-outline-secondary">
                                             <a class="text-decoration-none text-secondary" asp-controller="Event" asp-action="EventView" asp-route-id="@e.event_id">Görüntüle</a>
                                         </button>
+                                        
                                         <button type="button" class="btn btn-sm btn-outline-info">
-                                            <a href="#" class="btn text-decoration-none btn-sm text-primary" onclick="toggleDescription(@e.event_id)">Daha Fazla Göster</a>
-                                        </button>
+                                            <a href="#" class="btn text-decoration-none btn-sm text-primary" onclick="toggleDescription(@e.event_id)">Dahası...</a>
+
 
                                         @if (SignInManager.IsSignedIn(User))
                                         {
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">
-                                                <a class="text-decoration-none text-secondary" asp-area="" asp-page="/ActivityPages/ActivityAddPage/ActivityAdd">Katıl</a>
-                                            </button>
+                                            
+                                            <form method="post" asp-action="JoinEvent" >
+                                               <input type="hidden" name="eventId" value="@e.event_id" />
+                                               <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                                   <span class="text-decoration-none text-secondary">Etkinliğe Katıl</span>
+                                               </button>
+                                           </form>
+                                            
+
                                         }
                                     </div>
                                     <small class="text-body-secondary">@e.event_date</small>
